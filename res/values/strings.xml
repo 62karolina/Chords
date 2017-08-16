@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Chords</string>
+    <string name="chord">Аккорды</string>
+    <string name="top100">Топ 100</string>
+</resources>
