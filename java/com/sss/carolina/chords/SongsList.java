@@ -12,9 +12,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SongsList extends AppCompatActivity {
+public class SongsList extends AppCompatActivity implements Serializable {
 
 
     // благодоря этому классу мы будет разбирать данные на куски
@@ -51,9 +52,9 @@ public class SongsList extends AppCompatActivity {
             // класс который захватывает страницу
             try {
 
-                doc = Jsoup.connect("http://5lad.ru" + getIntent().getStringExtra("keyName")).get();
+                doc = Jsoup.connect(getIntent().getStringExtra("keyName")).get();
                 title = doc.select(".level2");
-                String relHref = title.attr("href");
+
                 titleList.clear();
 
                 for (Element titles : title) {

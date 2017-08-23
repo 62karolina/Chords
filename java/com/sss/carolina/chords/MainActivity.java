@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,10 +24,13 @@ public class MainActivity extends AppCompatActivity {
     public Elements title;
     // то в чем будем хранить данные пока не передадим адаптеру
     public ArrayList<String> titleList = new ArrayList<String>();
+    public ArrayList<String> titleList1 = new ArrayList<String>();
+
     // Listview Adapter для вывода данных
     private ArrayAdapter<String> adapter;
     // List view
     private ListView lv;
+    private Elements link;
     Document doc;
 
     @Override
@@ -44,28 +48,16 @@ public class MainActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                class NewThread extends AsyncTask<String, Void, String> {
-
-                    Elements relHref;
-
-
-                    @Override
-                    protected String doInBackground(String... params) {
-                        try {
-                            doc = Jsoup.connect("http://5lad.ru").get();
-                            title = doc.select(".level1");
-                            relHref = title.select(".href");
-                            Intent intent = new Intent(MainActivity.this, SongsList.class);
-                            intent.putExtra("keyName", relHref);
-                            startActivity(intent);
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return null;
-
-                    }
+                String catName = "";
+                for (int i = 0; i < titleList1.size(); i++) {
+                    catName = catName + titleList1.get(i) + " ";
                 }
+                Log.d("gfg", catName);
+
+                Intent intent = new Intent(MainActivity.this, SongsList.class);
+                intent.putExtra("keyName", titleList1.get());
+                startActivity(intent);
+
 
             }
 
@@ -85,12 +77,24 @@ public class MainActivity extends AppCompatActivity {
 
                 doc = Jsoup.connect("http://5lad.ru").get();
                 title = doc.select(".level1");
-                String relHref = title.attr("href");
+                Elements mBody = doc.select("a");
+                //   mBody.select("a");
+                Elements urls = mBody.tagName("href");
+                // link = title.select(".href");
+
                 titleList.clear();
+                for (Element i : urls) {
+
+
+                    titleList1.add(i.attr("abs:href"));
+
+                }
+
 
                 for (Element titles : title) {
 
                     titleList.add(titles.text());
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();
