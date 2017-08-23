@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("gfg", catName);
 
                 Intent intent = new Intent(MainActivity.this, SongsList.class);
-                intent.putExtra("keyName", titleList1.get());
+                intent.putExtra("keyName", titleList1.get(position));
                 startActivity(intent);
 
 
