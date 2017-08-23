@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
                 doc = Jsoup.connect("http://5lad.ru").get();
                 title = doc.select(".level1");
-                Elements mBody = doc.select("a");
+                Elements mBody = title.select("a");
                 //   mBody.select("a");
                 Elements urls = mBody.tagName("href");
                 // link = title.select(".href");
