@@ -1,8 +1,12 @@
 package com.sss.carolina.chords;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -22,6 +26,8 @@ public class SongsList extends AppCompatActivity implements Serializable {
     public Elements title;
     // то в чем будем хранить данные пока не передадим адаптеру
     public ArrayList<String> titleList = new ArrayList<String>();
+    public ArrayList<String> titleList1 = new ArrayList<String>();
+
     // Listview Adapter для вывода данных
     private ArrayAdapter<String> adapter;
     // List view
@@ -37,7 +43,26 @@ public class SongsList extends AppCompatActivity implements Serializable {
         // запрос к нашему отдельному поток на выборку данных
         new NewThread().execute();
         // Добавляем данные для ListView
-        adapter = new ArrayAdapter<String>(this, R.layout.list_item, R.id.product_name, titleList);
+        adapter = new ArrayAdapter<String>(this, R.layout.list_item, R.id.product_name, titleList1);
+
+        lv.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String catName = "";
+                for (int i = 0; i < titleList.size(); i++) {
+                    catName = catName + titleList.get(i) + " ";
+                }
+                Log.d("gfg", catName);
+
+                Intent intent = new Intent(SongsList.this, SongActivity.class);
+                intent.putExtra("keyName", titleList.get(position));
+
+                startActivity(intent);
+
+
+            }
+
+        });
 
 
     }
@@ -54,12 +79,19 @@ public class SongsList extends AppCompatActivity implements Serializable {
 
                 doc = Jsoup.connect(getIntent().getStringExtra("keyName")).get();
                 title = doc.select(".level2");
+                Elements mBody = title.select("a");
+                //   mBody.select("a");
+                Elements urls = mBody.tagName("href");
+                // link = title.select(".href");
 
                 titleList.clear();
+                for (Element i : urls) {
+                    titleList.add(i.attr("abs:href"));
+                }
 
                 for (Element titles : title) {
 
-                    titleList.add(titles.text());
+                    titleList1.add(titles.text());
                 }
             } catch (IOException e) {
                 e.printStackTrace();

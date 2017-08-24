@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, SongsList.class);
                 intent.putExtra("keyName", titleList1.get(position));
+                Intent intent1 = new Intent(MainActivity.this, SongActivity.class);
+                intent1.putExtra("keyName", titleList1.get(position));
                 startActivity(intent);
 
 
@@ -84,17 +86,12 @@ public class MainActivity extends AppCompatActivity {
 
                 titleList.clear();
                 for (Element i : urls) {
-
-
                     titleList1.add(i.attr("abs:href"));
-
                 }
 
 
                 for (Element titles : title) {
-
                     titleList.add(titles.text());
-
                 }
             } catch (IOException e) {
                 e.printStackTrace();
